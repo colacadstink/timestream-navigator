@@ -1,0 +1,16 @@
+<h2 mat-dialog-title>Log in to EventLink</h2>
+<div mat-dialog-content>
+  <p>Note: This information will not be sent to any non-Wizards servers, or saved locally.</p>
+  <mat-form-field>
+    <mat-label>Email</mat-label>
+    <input matInput [(ngModel)]="email">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Password</mat-label>
+    <input matInput type="password" [(ngModel)]="password">
+  </mat-form-field>
+  <p *ngIf="message" class="error-message">{{message}}</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="login()">Log in</button>
+</div>
