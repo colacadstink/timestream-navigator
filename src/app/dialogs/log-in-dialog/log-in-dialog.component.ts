@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
-import {EventlinkClient} from 'spirit-link';
+import {EventlinkClient, Role} from 'spirit-link';
+import {CurrentUserInfoService} from '../../services/current-user-info.service';
 
 @Component({
   selector: 'app-log-in-dialog',
@@ -8,13 +9,22 @@ import {EventlinkClient} from 'spirit-link';
   styleUrls: ['./log-in-dialog.component.less']
 })
 export class LogInDialogComponent {
+  public showRolesSelect = false;
+
   public email = '';
   public password = '';
+  public selectedRole?: Role;
   public message = '';
+
+  public get roles() {
+    return this.currentUserInfo.me?.roles || [];
+  }
+
 
   constructor(
     public dialogRef: MatDialogRef<LogInDialogComponent>,
-    public eventlink: EventlinkClient
+    public eventlink: EventlinkClient,
+    public currentUserInfo: CurrentUserInfoService,
   ) {}
 
   public login() {
@@ -23,10 +33,23 @@ export class LogInDialogComponent {
         throw new Error('How is wotcAuth not defined yet?');
       }
       await this.eventlink.wotcAuth.authToken;
-      this.dialogRef.close(true);
+      this.currentUserInfo.me = await this.eventlink.getMe();
+      this.showRolesSelect = true;
+      this.message = '';
+      this.selectedRole = this.roles[0];
+      if(this.roles.length === 1) {
+        this.setOrg();
+      }
     }).catch((error) => {
       this.message = 'There was an error trying to log in. Check your credentials?';
       console.error(error);
     });
+  }
+
+  public setOrg() {
+    if(this.selectedRole?.organization) {
+      this.currentUserInfo.activeOrg = this.selectedRole?.organization;
+      this.dialogRef.close(true);
+    }
   }
 }

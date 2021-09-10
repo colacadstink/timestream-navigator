@@ -1,16 +1,35 @@
-<h2 mat-dialog-title>Log in to EventLink</h2>
-<div mat-dialog-content>
-  <p>Note: This information will not be sent to any non-Wizards servers, or saved locally.</p>
-  <mat-form-field>
-    <mat-label>Email</mat-label>
-    <input matInput [(ngModel)]="email">
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>Password</mat-label>
-    <input matInput type="password" [(ngModel)]="password">
-  </mat-form-field>
-  <p *ngIf="message" class="error-message">{{message}}</p>
-</div>
-<div mat-dialog-actions>
-  <button mat-raised-button color="primary" (click)="login()">Log in</button>
-</div>
+<ng-container *ngIf="!showRolesSelect">
+  <h2 mat-dialog-title>Log in to EventLink</h2>
+  <div mat-dialog-content>
+    <p>Note: This information will never be sent to any non-Wizards servers.</p>
+    <mat-form-field appearance="fill">
+      <mat-label>Email</mat-label>
+      <input matInput [(ngModel)]="email" (keydown.enter)="login()">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Password</mat-label>
+      <input matInput type="password" [(ngModel)]="password" (keydown.enter)="login()">
+    </mat-form-field>
+    <p *ngIf="message" class="error-message">{{message}}</p>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-raised-button color="primary" (click)="login()">Log in</button>
+  </div>
+</ng-container>
+<ng-container *ngIf="showRolesSelect">
+  <h2 mat-dialog-title>Select organization</h2>
+  <div mat-dialog-content>
+    <mat-form-field appearance="fill">
+      <mat-label>Organization</mat-label>
+      <mat-select [(value)]="selectedRole">
+        <mat-option *ngFor="let role of roles" [value]="role">
+          {{role.organization?.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <p *ngIf="message" class="error-message">{{message}}</p>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-raised-button color="primary" (click)="setOrg()">Continue</button>
+  </div>
+</ng-container>

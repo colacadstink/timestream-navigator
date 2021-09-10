@@ -1,0 +1,22 @@
+<h2 mat-dialog-title>Add new widget</h2>
+<div mat-dialog-content>
+  <mat-form-field appearance="fill">
+    <mat-label>Event</mat-label>
+    <mat-select [(value)]="selectedEvent">
+      <mat-option *ngFor="let event of events" [value]="event">
+        {{event.title}} ({{event.scheduledStartTime | date:'shortDate'}})
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Widget type</mat-label>
+    <mat-select [(value)]="widgetType">
+      <mat-option *ngFor="let type of widgetTypes" [value]="type">
+        {{type | titlecase}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="addWidget()">Add widget</button>
+</div>

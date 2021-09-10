@@ -1,1 +1,11 @@
-Hello{{me ? ' ' + me.firstName : ''}}!
+<gridster [options]="options">
+  <gridster-item [item]="item.gridsterItem" *ngFor="let item of dashboard" class="mat-app-background">
+    <ng-container *ngIf="item.type === 'clock'">
+      <app-event-clock [event]="item.event" [showCode]="item.showCode"></app-event-clock>
+    </ng-container>
+  </gridster-item>
+</gridster>
+
+<button class="add-new" mat-mini-fab color="primary" aria-label="Add new widget" (click)="addNewWidget()">
+  <mat-icon>add</mat-icon>
+</button>

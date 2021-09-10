@@ -10,12 +10,18 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatInputModule} from '@angular/material/input';
 import {FormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
+import {MatSelectModule} from '@angular/material/select';
+import {GridsterModule} from 'angular-gridster2';
+import {MatIconModule} from '@angular/material/icon';
+import { AddNewWidgetDialogComponent } from './dialogs/add-new-widget-dialog/add-new-widget-dialog.component';
+import {MatCardModule} from '@angular/material/card';
 
 @NgModule({
   declarations: [
     AppComponent,
     EventClockComponent,
-    LogInDialogComponent
+    LogInDialogComponent,
+    AddNewWidgetDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -23,7 +29,11 @@ import {MatButtonModule} from '@angular/material/button';
     MatDialogModule,
     MatInputModule,
     FormsModule,
-    MatButtonModule
+    MatButtonModule,
+    MatSelectModule,
+    GridsterModule,
+    MatIconModule,
+    MatCardModule,
   ],
   providers: [
     {
