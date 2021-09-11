@@ -44,7 +44,9 @@ export class EventClockComponent implements OnInit {
   }
 
   public get minSecString() {
-    const totalSec = Math.floor(this.msRemaining / 1000);
+    const msRemaining = this.msRemaining;
+    const isNegative = msRemaining < 0;
+    const totalSec = Math.abs(Math.floor(msRemaining / 1000));
     const min = Math.floor(totalSec / 60);
     const sec = totalSec - (min * 60);
     let minStr = min.toString()
@@ -55,7 +57,7 @@ export class EventClockComponent implements OnInit {
     while(secStr.length < 2) {
       secStr = `0${secStr}`;
     }
-    return `${minStr}:${secStr}`;
+    return `${isNegative?'-':''}${minStr}:${secStr}`;
   }
 
   constructor(
