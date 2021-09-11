@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Event, EventlinkClient, Timer} from 'spirit-link';
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-event-clock',
@@ -24,6 +25,8 @@ export class EventClockComponent implements OnInit {
 
   private _timeLeft = 0;
   private _endDate: Date | null = null;
+  private curTimerId?: string;
+  private timerSub?: Subscription;
 
   public eventInfo?: Event;
   public isTimerRunning = false;
@@ -62,6 +65,16 @@ export class EventClockComponent implements OnInit {
   public ngOnInit() {
     this.eventlink.getEventInfo(this.event.id).then((info) => {
       this.eventInfo = info;
+      console.log(info);
+      this.curTimerId = info.gameState?.currentRound?.timerID || undefined;
+      if(this.curTimerId) {
+        this.eventlink.getTimerInfo(this.curTimerId).then((timer) => {
+          this.updateTimer(timer);
+        });
+        this.timerSub = this.eventlink.subscribeToTimer(this.curTimerId).subscribe((timer) => {
+          this.updateTimer(timer);
+        }) as any as Subscription; // TODO why????
+      }
     });
 
     this.eventlink.subscribeToCurrentRound(this.event.id).subscribe((round) => {
@@ -70,6 +83,13 @@ export class EventClockComponent implements OnInit {
         this.eventlink.getTimerInfo(round.timerID).then((timer) => {
           this.updateTimer(timer);
         });
+        if(this.curTimerId !== round.timerID) {
+          this.curTimerId = round.timerID;
+          this.timerSub?.unsubscribe();
+          this.timerSub = this.eventlink.subscribeToTimer(this.curTimerId).subscribe((timer) => {
+            this.updateTimer(timer);
+          }) as any as Subscription; // TODO why????
+        }
       }
     });
   }
@@ -80,8 +100,10 @@ export class EventClockComponent implements OnInit {
     this._timeLeft = timer.durationMs || 0;
     this.isTimerRunning = timer.state === 'RUNNING';
     if(this.isTimerRunning) {
-      this._endDate = new Date(now + this._timeLeft);
-      // TODO is this necessary?
+      const endTime = new Date(timer.durationStartTime).getTime() + (timer.durationMs || 0);
+      this._timeLeft = endTime - new Date(timer.serverTime).getTime();
+      this._endDate = new Date(Date.now() + this._timeLeft);
+
       const idleLoop = () => {
         if(this.isTimerRunning) {
           setTimeout(idleLoop, 200);
