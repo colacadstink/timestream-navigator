@@ -25,6 +25,7 @@ export const TimestreamNavigatorWidgetTypes = [
 })
 export class AppComponent implements OnInit {
   public events: Event[] = [];
+  public dashboard: TimestreamNavigatorWidget[] = [];
 
   public options: GridsterConfig = {
     draggable: {
@@ -37,7 +38,6 @@ export class AppComponent implements OnInit {
     minCols: 4,
     minRows: 4,
   };
-  public dashboard: TimestreamNavigatorWidget[] = [];
 
   constructor(
     private dialog: MatDialog,
@@ -64,5 +64,9 @@ export class AppComponent implements OnInit {
         this.dashboard.push(result);
       }
     });
+  }
+
+  public removeItem(item: TimestreamNavigatorWidget) {
+    this.dashboard.splice(this.dashboard.indexOf(item), 1);
   }
 }

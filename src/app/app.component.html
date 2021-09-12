@@ -3,6 +3,9 @@
     <ng-container *ngIf="item.type === 'clock'">
       <app-event-clock [event]="item.event" [showCode]="item.showCode"></app-event-clock>
     </ng-container>
+    <div class="remove-item">
+      <mat-icon (click)="removeItem(item)">close</mat-icon>
+    </div>
   </gridster-item>
 </gridster>
 
