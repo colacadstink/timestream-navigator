@@ -13,7 +13,9 @@
     <p *ngIf="message" class="error-message">{{message}}</p>
   </div>
   <div mat-dialog-actions>
-    <button mat-raised-button color="primary" (click)="login()">Log in</button>
+    <button mat-raised-button color="primary" [class.spinner]="isLoading" [disabled]="isLoading" (click)="login()">
+      Log in
+    </button>
   </div>
 </ng-container>
 <ng-container *ngIf="showRolesSelect">

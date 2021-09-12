@@ -15,6 +15,7 @@ import {GridsterModule} from 'angular-gridster2';
 import {MatIconModule} from '@angular/material/icon';
 import { AddNewWidgetDialogComponent } from './dialogs/add-new-widget-dialog/add-new-widget-dialog.component';
 import {MatCardModule} from '@angular/material/card';
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 
 @NgModule({
   declarations: [
@@ -23,18 +24,19 @@ import {MatCardModule} from '@angular/material/card';
     LogInDialogComponent,
     AddNewWidgetDialogComponent
   ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    MatDialogModule,
-    MatInputModule,
-    FormsModule,
-    MatButtonModule,
-    MatSelectModule,
-    GridsterModule,
-    MatIconModule,
-    MatCardModule,
-  ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        MatDialogModule,
+        MatInputModule,
+        FormsModule,
+        MatButtonModule,
+        MatSelectModule,
+        GridsterModule,
+        MatIconModule,
+        MatCardModule,
+        MatProgressSpinnerModule,
+    ],
   providers: [
     {
       provide: EventlinkClient,

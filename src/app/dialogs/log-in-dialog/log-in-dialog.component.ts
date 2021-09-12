@@ -15,11 +15,11 @@ export class LogInDialogComponent {
   public password = '';
   public selectedRole?: Role;
   public message = '';
+  public isLoading = false;
 
   public get roles() {
     return this.currentUserInfo.me?.roles || [];
   }
-
 
   constructor(
     public dialogRef: MatDialogRef<LogInDialogComponent>,
@@ -28,6 +28,7 @@ export class LogInDialogComponent {
   ) {}
 
   public login() {
+    this.isLoading = true;
     this.eventlink.login(this.email, this.password).then(async () => {
       if(!this.eventlink.wotcAuth) {
         throw new Error('How is wotcAuth not defined yet?');
@@ -43,6 +44,8 @@ export class LogInDialogComponent {
     }).catch((error) => {
       this.message = 'There was an error trying to log in. Check your credentials?';
       console.error(error);
+    }).finally(() => {
+      this.isLoading = false;
     });
   }
 
