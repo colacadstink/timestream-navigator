@@ -6,7 +6,7 @@
   </mat-card-header>
   <mat-card-content>
     <svg viewBox="0 0 36 18">
-      <text x="0" y="15">{{minSecString}}</text>
+      <text x="0" y="15" class="timer" [class.is-negative]="msRemaining <= 999">{{minSecString}}</text>
     </svg>
   </mat-card-content>
   <div class="eventCode" (click)="showCode = !showCode">

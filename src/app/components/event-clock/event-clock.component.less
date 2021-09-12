@@ -35,3 +35,22 @@ mat-card {
   min-width: 130px;
   background-color: var(--primary-color);
 }
+
+@keyframes blink {
+  100%,
+  0%, 69% {
+    fill: red;
+  }
+  70%, 99% {
+    fill: rgba(0,0,0,0);
+  }
+}
+
+.timer{
+  fill: #00d094;
+
+  &.is-negative{
+    fill: red;
+    animation: blink 1s infinite;
+  }
+}
