@@ -9,6 +9,6 @@
   </gridster-item>
 </gridster>
 
-<button class="add-new" mat-mini-fab color="primary" aria-label="Add new widget" (click)="addNewWidget()">
+<button *ngIf="!quietMode" class="add-new" mat-fab color="primary" aria-label="Add new widget" (click)="addNewWidget()">
   <mat-icon>add</mat-icon>
 </button>

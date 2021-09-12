@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {EventlinkClient, Event} from 'spirit-link';
 import {MatDialog} from '@angular/material/dialog';
 import {LogInDialogComponent} from './dialogs/log-in-dialog/log-in-dialog.component';
@@ -26,6 +26,7 @@ export const TimestreamNavigatorWidgetTypes = [
 export class AppComponent implements OnInit {
   public events: Event[] = [];
   public dashboard: TimestreamNavigatorWidget[] = [];
+  public quietMode = false;
 
   public options: GridsterConfig = {
     draggable: {
@@ -56,6 +57,13 @@ export class AppComponent implements OnInit {
     });
   }
 
+  @HostListener('window:keydown', ['$event'])
+  public handleKeyboardEvent(event: KeyboardEvent) {
+    if(event.key === 'Escape') {
+      this.quietMode = !this.quietMode;
+    }
+  }
+
   public async addNewWidget() {
     this.dialog.open(AddNewWidgetDialogComponent, {
       data: this.events,
@@ -67,6 +75,10 @@ export class AppComponent implements OnInit {
   }
 
   public removeItem(item: TimestreamNavigatorWidget) {
-    this.dashboard.splice(this.dashboard.indexOf(item), 1);
+    // This happens in a setTimeout so that gridster doesn't leave a preview behind:
+    // https://github.com/tiberiuzuld/angular-gridster2/issues/516#issuecomment-515536410
+    setTimeout(() => {
+      this.dashboard.splice(this.dashboard.indexOf(item), 1);
+    });
   }
 }
