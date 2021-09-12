@@ -6,3 +6,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 body {
   --primary-color: #7b1fa2;
 }
+
+.full-width-header .mat-card-header-text {
+  width: 100%;
+}
