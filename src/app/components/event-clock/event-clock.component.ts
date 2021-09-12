@@ -8,6 +8,7 @@ import {Subscription} from "rxjs";
   styleUrls: ['./event-clock.component.less']
 })
 export class EventClockComponent implements OnInit {
+  //region @Input() public event: Event
   @Input()
   public get event(): Event {
     throw new Error('Event is required for EventClockComponent');
@@ -19,9 +20,8 @@ export class EventClockComponent implements OnInit {
       configurable: true
     });
   }
-
-  @Input()
-  public showCode = false;
+  //endregion
+  @Input() public showCode = false;
 
   private _timeLeft = 0;
   private _endDate: Date | null = null;
