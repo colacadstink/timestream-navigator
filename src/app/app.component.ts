@@ -29,7 +29,13 @@ export class AppComponent implements OnInit {
   public options: GridsterConfig = {
     draggable: {
       enabled: true,
+      delayStart: 100,
     },
+    resizable: {
+      enabled: true,
+    },
+    minCols: 4,
+    minRows: 4,
   };
   public dashboard: TimestreamNavigatorWidget[] = [];
 
