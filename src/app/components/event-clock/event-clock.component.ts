@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Event, EventlinkClient, Timer} from 'spirit-link';
-import {Subscription} from "rxjs";
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-event-clock',
@@ -75,7 +75,7 @@ export class EventClockComponent implements OnInit {
         });
         this.timerSub = this.eventlink.subscribeToTimer(this.curTimerId).subscribe((timer) => {
           this.updateTimer(timer);
-        }) as any as Subscription; // TODO why????
+        });
       }
     });
 
@@ -90,7 +90,7 @@ export class EventClockComponent implements OnInit {
           this.timerSub?.unsubscribe();
           this.timerSub = this.eventlink.subscribeToTimer(this.curTimerId).subscribe((timer) => {
             this.updateTimer(timer);
-          }) as any as Subscription; // TODO why????
+          });
         }
       }
     });
