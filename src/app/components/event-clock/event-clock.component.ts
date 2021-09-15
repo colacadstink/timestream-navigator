@@ -44,6 +44,13 @@ export class EventClockComponent implements OnInit {
   }
 
   public get minSecString() {
+    if(this.eventInfo?.status === 'SCHEDULED') {
+      return '__:__';
+    }
+    if(this.eventInfo?.status === 'ENDED' || this.eventInfo?.status === 'CANCELLED') {
+      return 'Over';
+    }
+
     const msRemaining = this.msRemaining;
     const isNegative = msRemaining < 0;
     const totalSec = Math.abs(Math.floor(msRemaining / 1000));
@@ -58,6 +65,17 @@ export class EventClockComponent implements OnInit {
       secStr = `0${secStr}`;
     }
     return `${isNegative?'-':''}${minStr}:${secStr}`;
+  }
+
+  public get activeClass() {
+    if(this.eventInfo?.status === 'SCHEDULED') {
+      return 'is-scheduled';
+    }
+    if(this.eventInfo?.status === 'ENDED' || this.eventInfo?.status === 'CANCELLED') {
+      return 'is-over';
+    }
+
+    return (this.msRemaining <= 999 ? 'is-negative' : '')
   }
 
   constructor(
