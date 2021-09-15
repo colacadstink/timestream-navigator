@@ -65,19 +65,7 @@ export class EventClockComponent implements OnInit {
   ) { }
 
   public ngOnInit() {
-    this.eventlink.getEventInfo(this.event.id).then((info) => {
-      this.eventInfo = info;
-      console.log(info);
-      this.curTimerId = info.gameState?.currentRound?.timerID || undefined;
-      if(this.curTimerId) {
-        this.eventlink.getTimerInfo(this.curTimerId).then((timer) => {
-          this.updateTimer(timer);
-        });
-        this.timerSub = this.eventlink.subscribeToTimer(this.curTimerId).subscribe((timer) => {
-          this.updateTimer(timer);
-        });
-      }
-    });
+    this.loadEventInfo();
 
     this.eventlink.subscribeToCurrentRound(this.event.id).subscribe((round) => {
       console.log(round);
@@ -92,6 +80,23 @@ export class EventClockComponent implements OnInit {
             this.updateTimer(timer);
           });
         }
+      }
+    });
+  }
+
+  public loadEventInfo(refresh = false) {
+    this.eventlink.getEventInfo(this.event.id, (refresh ? 'network-only' : undefined)).then((info) => {
+      this.eventInfo = info;
+      console.log(info);
+      this.curTimerId = info.gameState?.currentRound?.timerID || undefined;
+      if(this.curTimerId) {
+        this.eventlink.getTimerInfo(this.curTimerId).then((timer) => {
+          this.updateTimer(timer);
+        });
+        this.timerSub?.unsubscribe();
+        this.timerSub = this.eventlink.subscribeToTimer(this.curTimerId).subscribe((timer) => {
+          this.updateTimer(timer);
+        });
       }
     });
   }
