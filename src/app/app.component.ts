@@ -53,6 +53,10 @@ export class AppComponent implements OnInit {
     }).afterClosed().subscribe(async (result) => {
       if(result && this.currentUserInfo.activeOrg?.id) {
         this.events = (await this.eventlink.getUpcomingEvents(this.currentUserInfo.activeOrg.id)).events;
+        const prevDashboardStr = localStorage.getItem('dashboard');
+        if(prevDashboardStr) {
+          this.dashboard = JSON.parse(prevDashboardStr);
+        }
       }
     });
   }
@@ -64,12 +68,18 @@ export class AppComponent implements OnInit {
     }
   }
 
+  public reset() {
+    localStorage.clear();
+    location.reload();
+  }
+
   public async addNewWidget() {
     this.dialog.open(AddNewWidgetDialogComponent, {
       data: this.events,
     }).afterClosed().subscribe((result?: TimestreamNavigatorWidget) => {
       if(result) {
         this.dashboard.push(result);
+        this.saveDashboard();
       }
     });
   }
@@ -79,6 +89,11 @@ export class AppComponent implements OnInit {
     // https://github.com/tiberiuzuld/angular-gridster2/issues/516#issuecomment-515536410
     setTimeout(() => {
       this.dashboard.splice(this.dashboard.indexOf(item), 1);
+      this.saveDashboard();
     });
+  }
+
+  public saveDashboard() {
+    localStorage.setItem('dashboard', JSON.stringify(this.dashboard));
   }
 }

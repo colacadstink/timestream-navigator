@@ -1,5 +1,8 @@
 <gridster [options]="options">
-  <gridster-item [item]="item.gridsterItem" *ngFor="let item of dashboard" class="mat-app-background">
+  <gridster-item *ngFor="let item of dashboard" class="mat-app-background"
+                 [item]="item.gridsterItem"
+                 (itemChange)="item.gridsterItem = $event.item; saveDashboard()"
+  >
     <ng-container *ngIf="item.type === 'clock'">
       <app-event-clock [event]="item.event" [showCode]="item.showCode"></app-event-clock>
     </ng-container>
@@ -11,4 +14,7 @@
 
 <button *ngIf="!quietMode" class="add-new" mat-fab color="primary" aria-label="Add new widget" (click)="addNewWidget()">
   <mat-icon>add</mat-icon>
+</button>
+<button *ngIf="!quietMode" class="reset" mat-fab color="warn" aria-label="Add new widget" (click)="reset()">
+  <mat-icon>logout</mat-icon>
 </button>
