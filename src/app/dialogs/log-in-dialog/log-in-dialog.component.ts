@@ -37,6 +37,7 @@ export class LogInDialogComponent implements OnInit {
       this.eventlink.wotcAuth = wotcAuth;
 
       try {
+        await this.eventlink.wotcAuth.authToken;
         await this.eventlink.init();
         this.currentUserInfo.me = await this.eventlink.getMe();
       } catch {
