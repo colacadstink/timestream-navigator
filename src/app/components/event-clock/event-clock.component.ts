@@ -105,7 +105,6 @@ export class EventClockComponent implements OnInit {
   public loadEventInfo(refresh = false) {
     this.eventlink.getEventInfo(this.event.id, (refresh ? 'network-only' : undefined)).then((info) => {
       this.eventInfo = info;
-      console.log(info);
       this.curTimerId = info.gameState?.currentRound?.timerID || undefined;
       if(this.curTimerId) {
         this.eventlink.getTimerInfo(this.curTimerId).then((timer) => {
