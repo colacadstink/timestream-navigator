@@ -16,13 +16,15 @@ import {MatIconModule} from '@angular/material/icon';
 import { AddNewWidgetDialogComponent } from './dialogs/add-new-widget-dialog/add-new-widget-dialog.component';
 import {MatCardModule} from '@angular/material/card';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import { JoinCodeComponent } from './components/join-code/join-code.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     EventClockComponent,
     LogInDialogComponent,
-    AddNewWidgetDialogComponent
+    AddNewWidgetDialogComponent,
+    JoinCodeComponent
   ],
     imports: [
         BrowserModule,

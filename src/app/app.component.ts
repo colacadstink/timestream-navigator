@@ -12,10 +12,13 @@ export type TimestreamNavigatorWidget = {
 } & ({
   type: 'clock',
   showCode: boolean,
+} | {
+  type: 'joinCode',
 });
 
 export const TimestreamNavigatorWidgetTypes = [
   'clock',
+  'joinCode',
 ];
 
 @Component({

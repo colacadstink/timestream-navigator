@@ -6,6 +6,9 @@
     <ng-container *ngIf="item.type === 'clock'">
       <app-event-clock [event]="item.event" [showCode]="item.showCode"></app-event-clock>
     </ng-container>
+    <ng-container *ngIf="item.type === 'joinCode'">
+      <app-join-code [event]="item.event"></app-join-code>
+    </ng-container>
     <div class="remove-item">
       <mat-icon (click)="removeItem(item)">close</mat-icon>
     </div>
