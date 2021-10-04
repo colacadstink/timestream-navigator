@@ -9,7 +9,7 @@
       <text x="0" y="15" class="timer {{activeClass}}">{{minSecString}}</text>
     </svg>
   </mat-card-content>
-  <div class="eventCode" (click)="showCode = !showCode">
-    {{showCode ? (eventInfo?.shortCode || 'NOCODE') : ''}}
+  <div class="eventCode" [class.invisible]="!showCode" (click)="showCode = !showCode">
+    {{eventInfo?.shortCode || 'NOCODE'}}
   </div>
 </mat-card>
