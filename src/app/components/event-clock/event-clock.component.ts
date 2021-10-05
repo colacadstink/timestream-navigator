@@ -21,7 +21,7 @@ export class EventClockComponent implements OnInit {
     });
   }
   //endregion
-  @Input() public showCode = false;
+  @Input() public hideCode = false;
 
   private _timeLeft = 0;
   private _endDate: Date | null = null;

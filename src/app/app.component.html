@@ -4,12 +4,12 @@
                  (itemChange)="item.gridsterItem = $event.item; saveDashboard()"
   >
     <ng-container *ngIf="item.type === 'clock'">
-      <app-event-clock [event]="item.event" [showCode]="item.showCode"></app-event-clock>
+      <app-event-clock [event]="item.event" [hideCode]="item.showCode"></app-event-clock>
     </ng-container>
     <ng-container *ngIf="item.type === 'joinCode'">
       <app-join-code [event]="item.event"></app-join-code>
     </ng-container>
-    <div class="remove-item">
+    <div class="remove-item" *ngIf="!quietMode">
       <mat-icon (click)="removeItem(item)">close</mat-icon>
     </div>
   </gridster-item>
