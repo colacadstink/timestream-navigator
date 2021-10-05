@@ -14,11 +14,14 @@ export type TimestreamNavigatorWidget = {
   showCode: boolean,
 } | {
   type: 'joinCode',
+} | {
+  type: 'playerSeating'
 });
 
 export const TimestreamNavigatorWidgetTypes = [
   'clock',
   'joinCode',
+  'playerSeating'
 ];
 
 @Component({

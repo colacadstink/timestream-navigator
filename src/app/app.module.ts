@@ -17,6 +17,8 @@ import { AddNewWidgetDialogComponent } from './dialogs/add-new-widget-dialog/add
 import {MatCardModule} from '@angular/material/card';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import { JoinCodeComponent } from './components/join-code/join-code.component';
+import { PlayerSeatingComponent } from './components/player-seating/player-seating.component';
+import { HumanPrintPipe } from './pipes/human-print.pipe';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { JoinCodeComponent } from './components/join-code/join-code.component';
     EventClockComponent,
     LogInDialogComponent,
     AddNewWidgetDialogComponent,
-    JoinCodeComponent
+    JoinCodeComponent,
+    PlayerSeatingComponent,
+    HumanPrintPipe
   ],
     imports: [
         BrowserModule,

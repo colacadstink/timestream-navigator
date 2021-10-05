@@ -12,7 +12,7 @@
     <mat-label>Widget type</mat-label>
     <mat-select [(value)]="widgetType">
       <mat-option *ngFor="let type of widgetTypes" [value]="type">
-        {{type | titlecase}}
+        {{type | humanPrint}}
       </mat-option>
     </mat-select>
   </mat-form-field>
