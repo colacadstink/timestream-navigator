@@ -43,7 +43,82 @@ export class EventClockComponent implements OnInit {
     }
   }
 
+  private _minSecString = '';
   public get minSecString() {
+    if(!this._minSecString) {
+      this._minSecString = this.getMinSecString();
+    }
+    return this._minSecString;
+  }
+
+  public get activeClass() {
+    if(this.eventInfo?.status === 'SCHEDULED') {
+      return 'is-scheduled';
+    }
+    if(this.eventInfo?.status === 'ENDED' || this.eventInfo?.status === 'CANCELLED') {
+      return 'is-over';
+    }
+
+    return (this.msRemaining <= 999 ? 'is-negative' : '')
+  }
+
+  constructor(
+    private eventlink: EventlinkClient
+  ) { }
+
+  public ngOnInit() {
+    this.loadEventInfo();
+
+    this.eventlink.subscribeToRunningEventStatus(this.event.id).subscribe((status) => {
+      console.log(`Event ${this.eventInfo?.title} updated: ${status}`);
+      this.loadEventInfo(true);
+    });
+  }
+
+  public loadEventInfo(refresh = false) {
+    this.eventlink.getEventInfo(this.event.id, (refresh ? 'network-only' : undefined)).then((info) => {
+      this.eventInfo = info;
+      console.log(info);
+      this.curTimerId = info.gameState?.currentRound?.timerID || undefined;
+      if(this.curTimerId) {
+        this.eventlink.getTimerInfo(this.curTimerId).then((timer) => {
+          this.updateTimer(timer);
+        });
+        this.timerSub?.unsubscribe();
+        this.timerSub = this.eventlink.subscribeToTimer(this.curTimerId).subscribe((timer) => {
+          this.updateTimer(timer);
+        });
+      } else {
+        console.log('No timer found in current round');
+      }
+    });
+  }
+
+  private updateTimer(timer: Timer) {
+    const now = Date.now();
+
+    this._timeLeft = timer.durationMs || 0;
+    this.isTimerRunning = timer.state === 'RUNNING';
+    if(this.isTimerRunning) {
+      const endTime = new Date(timer.durationStartTime).getTime() + (timer.durationMs || 0);
+      this._timeLeft = endTime - new Date(timer.serverTime).getTime();
+      this._endDate = new Date(now + this._timeLeft);
+
+      this._minSecString = this.getMinSecString();
+
+      const idleLoop = () => {
+        this._minSecString = this.getMinSecString();
+        if(this.isTimerRunning) {
+          setTimeout(idleLoop, 200);
+        }
+      };
+      setTimeout(idleLoop, 200);
+    } else {
+      this._endDate = null;
+    }
+  }
+
+  private getMinSecString() {
     if(this.eventInfo?.status === 'SCHEDULED') {
       return '__:__';
     }
@@ -65,77 +140,5 @@ export class EventClockComponent implements OnInit {
       secStr = `0${secStr}`;
     }
     return `${isNegative?'-':''}${minStr}:${secStr}`;
-  }
-
-  public get activeClass() {
-    if(this.eventInfo?.status === 'SCHEDULED') {
-      return 'is-scheduled';
-    }
-    if(this.eventInfo?.status === 'ENDED' || this.eventInfo?.status === 'CANCELLED') {
-      return 'is-over';
-    }
-
-    return (this.msRemaining <= 999 ? 'is-negative' : '')
-  }
-
-  constructor(
-    private eventlink: EventlinkClient
-  ) { }
-
-  public ngOnInit() {
-    this.loadEventInfo();
-
-    this.eventlink.subscribeToCurrentRound(this.event.id).subscribe((round) => {
-      console.log(round);
-      if(round.timerID) {
-        this.eventlink.getTimerInfo(round.timerID).then((timer) => {
-          this.updateTimer(timer);
-        });
-        if(this.curTimerId !== round.timerID) {
-          this.curTimerId = round.timerID;
-          this.timerSub?.unsubscribe();
-          this.timerSub = this.eventlink.subscribeToTimer(this.curTimerId).subscribe((timer) => {
-            this.updateTimer(timer);
-          });
-        }
-      }
-    });
-  }
-
-  public loadEventInfo(refresh = false) {
-    this.eventlink.getEventInfo(this.event.id, (refresh ? 'network-only' : undefined)).then((info) => {
-      this.eventInfo = info;
-      this.curTimerId = info.gameState?.currentRound?.timerID || undefined;
-      if(this.curTimerId) {
-        this.eventlink.getTimerInfo(this.curTimerId).then((timer) => {
-          this.updateTimer(timer);
-        });
-        this.timerSub?.unsubscribe();
-        this.timerSub = this.eventlink.subscribeToTimer(this.curTimerId).subscribe((timer) => {
-          this.updateTimer(timer);
-        });
-      }
-    });
-  }
-
-  private updateTimer(timer: Timer) {
-    const now = Date.now();
-
-    this._timeLeft = timer.durationMs || 0;
-    this.isTimerRunning = timer.state === 'RUNNING';
-    if(this.isTimerRunning) {
-      const endTime = new Date(timer.durationStartTime).getTime() + (timer.durationMs || 0);
-      this._timeLeft = endTime - new Date(timer.serverTime).getTime();
-      this._endDate = new Date(now + this._timeLeft);
-
-      const idleLoop = () => {
-        if(this.isTimerRunning) {
-          setTimeout(idleLoop, 200);
-        }
-      };
-      setTimeout(idleLoop, 200);
-    } else {
-      this._endDate = null;
-    }
   }
 }
