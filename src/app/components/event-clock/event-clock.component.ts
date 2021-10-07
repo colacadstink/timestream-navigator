@@ -104,8 +104,6 @@ export class EventClockComponent implements OnInit {
       this._timeLeft = endTime - new Date(timer.serverTime).getTime();
       this._endDate = new Date(now + this._timeLeft);
 
-      this._minSecString = this.getMinSecString();
-
       const idleLoop = () => {
         this._minSecString = this.getMinSecString();
         if(this.isTimerRunning) {
@@ -116,6 +114,8 @@ export class EventClockComponent implements OnInit {
     } else {
       this._endDate = null;
     }
+
+    this._minSecString = this.getMinSecString();
   }
 
   private getMinSecString() {
