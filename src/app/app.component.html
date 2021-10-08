@@ -1,4 +1,4 @@
-<mat-toolbar color="primary">
+<mat-toolbar color="primary" *ngIf="!quietMode.value">
   <a mat-button routerLink="/">Timestream Navigator</a>
   <span style="flex: 1 1 auto"></span>
   <mat-form-field *ngIf="(currentUserInfo.me?.roles?.length || 0) > 1" class="organization-dropdown" appearance="fill">
@@ -15,4 +15,6 @@
     <mat-icon>logout</mat-icon>
   </button>
 </mat-toolbar>
-<router-outlet *ngIf="this.currentUserInfo.me && this.currentUserInfo.activeOrg"></router-outlet>
+<div class="router-container" [class.toolbar-visible]="!quietMode.value">
+  <router-outlet *ngIf="this.currentUserInfo.me && this.currentUserInfo.activeOrg"></router-outlet>
+</div>
