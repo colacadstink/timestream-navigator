@@ -1,7 +1,10 @@
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Event} from 'spirit-link';
-import {TimestreamNavigatorWidget, TimestreamNavigatorWidgetTypes} from '../../app.component';
+import {
+  TimestreamNavigatorWidget,
+  TimestreamNavigatorWidgetTypes
+} from '../../components/dashboard/dashboard.component';
 
 @Component({
   selector: 'app-add-new-widget-dialog',

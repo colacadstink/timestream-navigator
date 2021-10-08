@@ -1,28 +1,8 @@
 import {Component, HostListener, OnInit} from '@angular/core';
-import {EventlinkClient, Event} from 'spirit-link';
 import {MatDialog} from '@angular/material/dialog';
 import {LogInDialogComponent} from './dialogs/log-in-dialog/log-in-dialog.component';
 import {CurrentUserInfoService} from './services/current-user-info.service';
-import {GridsterConfig, GridsterItem} from 'angular-gridster2';
-import {AddNewWidgetDialogComponent} from './dialogs/add-new-widget-dialog/add-new-widget-dialog.component';
-
-export type TimestreamNavigatorWidget = {
-  gridsterItem: GridsterItem,
-  event: Event,
-} & ({
-  type: 'clock',
-  showCode: boolean,
-} | {
-  type: 'joinCode',
-} | {
-  type: 'playerSeating'
-});
-
-export const TimestreamNavigatorWidgetTypes = [
-  'clock',
-  'joinCode',
-  'playerSeating'
-];
+import {QuietModeService} from './services/quiet-mode.service';
 
 @Component({
   selector: 'app-root',
@@ -30,25 +10,9 @@ export const TimestreamNavigatorWidgetTypes = [
   styleUrls: ['./app.component.less']
 })
 export class AppComponent implements OnInit {
-  public events: Event[] = [];
-  public dashboard: TimestreamNavigatorWidget[] = [];
-  public quietMode = false;
-
-  public options: GridsterConfig = {
-    draggable: {
-      enabled: true,
-      delayStart: 100,
-    },
-    resizable: {
-      enabled: true,
-    },
-    minCols: 4,
-    minRows: 4,
-  };
-
   constructor(
     private dialog: MatDialog,
-    public eventlink: EventlinkClient,
+    public quietMode: QuietModeService,
     public currentUserInfo: CurrentUserInfoService,
   ) {}
 
@@ -56,50 +20,18 @@ export class AppComponent implements OnInit {
     this.dialog.open(LogInDialogComponent, {
       width: '300px',
       disableClose: true
-    }).afterClosed().subscribe(async (result) => {
-      if(result && this.currentUserInfo.activeOrg?.id) {
-        this.events = (await this.eventlink.getUpcomingEvents(this.currentUserInfo.activeOrg.id)).events;
-        const prevDashboardStr = localStorage.getItem('dashboard');
-        if(prevDashboardStr) {
-          this.dashboard = JSON.parse(prevDashboardStr);
-        }
-      }
-    });
+    }).afterClosed().subscribe();
   }
 
   @HostListener('window:keydown', ['$event'])
   public handleKeyboardEvent(event: KeyboardEvent) {
     if(event.key === 'Escape') {
-      this.quietMode = !this.quietMode;
+      this.quietMode.value = !this.quietMode.value;
     }
   }
 
   public reset() {
     localStorage.clear();
     location.reload();
-  }
-
-  public async addNewWidget() {
-    this.dialog.open(AddNewWidgetDialogComponent, {
-      data: this.events,
-    }).afterClosed().subscribe((result?: TimestreamNavigatorWidget) => {
-      if(result) {
-        this.dashboard.push(result);
-        this.saveDashboard();
-      }
-    });
-  }
-
-  public removeItem(item: TimestreamNavigatorWidget) {
-    // This happens in a setTimeout so that gridster doesn't leave a preview behind:
-    // https://github.com/tiberiuzuld/angular-gridster2/issues/516#issuecomment-515536410
-    setTimeout(() => {
-      this.dashboard.splice(this.dashboard.indexOf(item), 1);
-      this.saveDashboard();
-    });
-  }
-
-  public saveDashboard() {
-    localStorage.setItem('dashboard', JSON.stringify(this.dashboard));
   }
 }
