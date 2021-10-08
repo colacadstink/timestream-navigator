@@ -1,10 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {EventlinkClient, Event} from 'spirit-link';
 import {MatDialog} from '@angular/material/dialog';
 import {GridsterConfig, GridsterItem} from 'angular-gridster2';
 import {AddNewWidgetDialogComponent} from '../../dialogs/add-new-widget-dialog/add-new-widget-dialog.component';
 import {CurrentUserInfoService} from '../../services/current-user-info.service';
 import {QuietModeService} from '../../services/quiet-mode.service';
+import {Subscription} from 'rxjs';
 
 export type TimestreamNavigatorWidget = {
   gridsterItem: GridsterItem,
@@ -29,7 +30,9 @@ export const TimestreamNavigatorWidgetTypes = [
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.less']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
+  private subs: Subscription[] = [];
+
   public events: Event[] = [];
   public dashboard: TimestreamNavigatorWidget[] = [];
 
@@ -61,6 +64,14 @@ export class DashboardComponent implements OnInit {
       }
     } else {
       location.reload();
+    }
+
+    this.subs.push(this.quietMode.observable.subscribe(() => this.options.api?.resize && this.options.api?.resize()));
+  }
+
+  public ngOnDestroy() {
+    for(const sub of this.subs) {
+      sub.unsubscribe();
     }
   }
 
