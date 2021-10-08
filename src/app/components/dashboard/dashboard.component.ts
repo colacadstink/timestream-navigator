@@ -60,13 +60,8 @@ export class DashboardComponent implements OnInit {
         this.dashboard = JSON.parse(prevDashboardStr);
       }
     } else {
-      this.reset();
+      location.reload();
     }
-  }
-
-  public reset() {
-    localStorage.clear();
-    location.reload();
   }
 
   public async addNewWidget() {

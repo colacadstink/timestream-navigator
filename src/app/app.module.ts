@@ -20,6 +20,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import {JoinCodeComponent} from './components/dashboard/widgets/join-code/join-code.component';
 import {PlayerSeatingComponent} from './components/dashboard/widgets/player-seating/player-seating.component';
 import {EventClockComponent} from './components/dashboard/widgets/event-clock/event-clock.component';
+import {MatToolbarModule} from '@angular/material/toolbar';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import {EventClockComponent} from './components/dashboard/widgets/event-clock/ev
     MatIconModule,
     MatCardModule,
     MatProgressSpinnerModule,
+    MatToolbarModule,
   ],
   providers: [
     {

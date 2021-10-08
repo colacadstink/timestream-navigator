@@ -31,3 +31,13 @@ button.spinner:before {
   border-top-color: #000000;
   animation: spinner .8s linear infinite;
 }
+
+/* The default coloring for the dropdown looks like trash. */
+.mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+  color: white;
+  background-color: #8a2ba9;
+}
+
+.mat-form-field.mat-focused .mat-form-field-label {
+  color: #da83ff;
+}

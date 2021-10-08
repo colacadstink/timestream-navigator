@@ -1,1 +1,18 @@
-<router-outlet *ngIf="this.currentUserInfo.me"></router-outlet>
+<mat-toolbar color="primary">
+  <a mat-button routerLink="/">Timestream Navigator</a>
+  <span style="flex: 1 1 auto"></span>
+  <mat-form-field *ngIf="(currentUserInfo.me?.roles?.length || 0) > 1" class="organization-dropdown" appearance="fill">
+    <mat-label>Organization</mat-label>
+    <mat-select [value]="currentUserInfo.activeOrg" (valueChange)="orgChange($event)">
+      <mat-option *ngFor="let role of currentUserInfo.me?.roles" [value]="role.organization">
+        {{role.organization?.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <span *ngIf="currentUserInfo.activeOrg && (currentUserInfo.me?.roles?.length || 0) <= 1">{{currentUserInfo.activeOrg.name}}</span>
+  <span>{{this.currentUserInfo?.me?.firstName}} {{this.currentUserInfo?.me?.lastName}}</span>
+  <button mat-icon-button (click)="reset()">
+    <mat-icon>logout</mat-icon>
+  </button>
+</mat-toolbar>
+<router-outlet *ngIf="this.currentUserInfo.me && this.currentUserInfo.activeOrg"></router-outlet>

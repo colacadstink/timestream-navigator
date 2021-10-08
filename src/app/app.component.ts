@@ -3,6 +3,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {LogInDialogComponent} from './dialogs/log-in-dialog/log-in-dialog.component';
 import {CurrentUserInfoService} from './services/current-user-info.service';
 import {QuietModeService} from './services/quiet-mode.service';
+import {Organization} from 'spirit-link';
 
 @Component({
   selector: 'app-root',
@@ -32,6 +33,12 @@ export class AppComponent implements OnInit {
 
   public reset() {
     localStorage.clear();
+    location.reload();
+  }
+
+  public orgChange(org: Organization) {
+    this.currentUserInfo.activeOrg = org;
+    localStorage.setItem('selectedOrgID', org.id);
     location.reload();
   }
 }
