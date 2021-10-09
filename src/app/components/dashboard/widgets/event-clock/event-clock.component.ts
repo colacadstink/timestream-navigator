@@ -90,6 +90,8 @@ export class EventClockComponent implements OnInit {
         });
       } else {
         console.log('No timer found in current round');
+        this.isTimerRunning = false;
+        this._minSecString = this.getMinSecString();
       }
     });
   }
