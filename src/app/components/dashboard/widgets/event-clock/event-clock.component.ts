@@ -79,9 +79,15 @@ export class EventClockComponent implements OnInit {
     this.eventlink.getEventInfo(this.event.id, (refresh ? 'network-only' : undefined)).then((info) => {
       this.eventInfo = info;
       console.log(info);
-      this.curTimerId = info.gameState?.currentRound?.timerID || undefined;
+      this.curTimerId = info.gameState?.top8DraftTimerID
+        || info.gameState?.constructDraftTimerID
+        || info.gameState?.draftTimerID
+        || info.gameState?.currentRound?.timerID
+        || undefined;
       if(this.curTimerId) {
+        console.log('Found timer ' + this.curTimerId);
         this.eventlink.getTimerInfo(this.curTimerId).then((timer) => {
+          console.log(timer);
           this.updateTimer(timer);
         });
         this.timerSub?.unsubscribe();

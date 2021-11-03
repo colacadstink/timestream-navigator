@@ -5,8 +5,22 @@
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <div class="pairings">
-      Coming soon!
+    <div class="registration-info" *ngIf="showRegistrationInfo()">
+      <div class="registered-players">
+        Registered players: {{players.length}}
+        <ul>
+          <li *ngFor="let player of players">{{player.firstName}} {{player.lastName}}</li>
+        </ul>
+      </div>
+      <div class="interested-players" *ngIf="reservations.length > 0">
+        Pending: {{reservations.length}}
+        <ul>
+          <li *ngFor="let r of reservations">{{r.firstName}} {{r.lastName}}</li>
+        </ul>
+      </div>
+    </div>
+    <div class="draft-info" *ngIf="showDraftInfo()">
+
     </div>
   </mat-card-content>
 </mat-card>

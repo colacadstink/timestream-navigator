@@ -9,6 +9,9 @@
     <ng-container *ngIf="item.type === 'joinCode'">
       <app-join-code [event]="item.event"></app-join-code>
     </ng-container>
+    <ng-container *ngIf="item.type === 'playerSeating'">
+      <app-player-seating [event]="item.event"></app-player-seating>
+    </ng-container>
     <div class="remove-item" *ngIf="!quietMode.value">
       <mat-icon (click)="removeItem(item)">close</mat-icon>
     </div>
