@@ -22,14 +22,14 @@
  * Observable symbol ponyfill
  */
 // TODO remove this once spirit-link 1.3.6 gets published
-// if(Symbol) {
-//   if(!Symbol.observable) {
-//     console.log('Symbol.observable does NOT exist, creating it');
-//     (Symbol as any).observable = Symbol.for('observable'); // I'm not sure why this isn't being created right but it's not and it's causing issues
-//   } else {
-//     console.log('Symbol.observable exists, you can remove this');
-//   }
-// }
+if(Symbol) {
+  if(!Symbol.observable) {
+    console.log('Symbol.observable does NOT exist, creating it');
+    (Symbol as any).observable = Symbol.for('observable'); // I'm not sure why this isn't being created right but it's not and it's causing issues
+  } else {
+    console.log('Symbol.observable exists, you can remove this');
+  }
+}
 
 /**
  * IE11 requires the following for NgClass support on SVG elements
