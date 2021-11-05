@@ -1,5 +1,13 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {Event, EventlinkClient, EventStatus, Registration, ReservationNotificationPayload} from 'spirit-link';
+import {
+  Event,
+  EventlinkClient,
+  EventStatus,
+  Match,
+  Registration,
+  ReservationNotificationPayload,
+  Team
+} from 'spirit-link';
 import {Subscription} from 'rxjs';
 
 /*
@@ -160,6 +168,19 @@ export class PlayerSeatingComponent implements OnInit, OnDestroy {
     return this.eventInfo?.status && [EventStatus.Roundcertified, EventStatus.Ended].includes(this.eventInfo?.status);
   }
 
+  public static getTeamName(team: Team) {
+    if(!team) {
+      return 'n/a';
+    }
+    if(team.name) {
+      return team.name;
+    }
+    if(team.players && team.players.length === 1) {
+      return team.players[0].lastName + ', ' + team.players[0].firstName;
+    }
+    return 'unknown';
+  }
+
   public getPairingsByPlayer() {
     type MatchByName = {
       table: number,
@@ -168,15 +189,23 @@ export class PlayerSeatingComponent implements OnInit, OnDestroy {
       opponent: string,
     };
 
-    const matches = this.eventInfo?.gameState?.currentRound?.matches || [];
+    const matches: Match[] = this.eventInfo?.gameState?.currentRound?.matches || [];
     const pairings: MatchByName[] = [];
     for(const match of matches) {
       pairings.push({
         table: match.tableNumber || -1,
-        name: match.teams[0].name || 'unknown',
-        result: `${match.leftTeamWins}-${match.rightTeamWins}`,
-        opponent: match.teams[1].name || 'unknown',
+        name: PlayerSeatingComponent.getTeamName(match.teams[0]),
+        result: `${match.leftTeamWins || 0}-${match.rightTeamWins || 0}`,
+        opponent: PlayerSeatingComponent.getTeamName(match.teams[1]),
       });
+      if(match.teams[1]) {
+        pairings.push({
+          table: match.tableNumber || -1,
+          name: PlayerSeatingComponent.getTeamName(match.teams[1]),
+          result: `${match.rightTeamWins || 0}-${match.leftTeamWins || 0}`,
+          opponent: PlayerSeatingComponent.getTeamName(match.teams[0]),
+        });
+      }
     }
     return pairings.sort((a, b) => {
       if(a.name.toLowerCase() < b.name.toLowerCase()) {

@@ -25,7 +25,7 @@
     <div class="round-info" *ngIf="showRoundInfo()">
       <ul>
         <li *ngFor="let pairing of getPairingsByPlayer()">
-          {{pairing.table}} | {{pairing.name}} - {{pairing.result}} - {{pairing.opponent}}
+          {{pairing.table === -1 ? 'Bye' : pairing.table}} | {{pairing.name}} - {{pairing.result}} - {{pairing.opponent}}
         </li>
       </ul>
     </div>
