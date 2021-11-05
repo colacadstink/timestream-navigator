@@ -23,7 +23,11 @@
  */
 // TODO remove this once spirit-link 1.3.6 gets published
 if(Symbol) {
-  (Symbol as any).observable = Symbol.for('observable'); // I'm not sure why this isn't being created right but it's not and it's causing issues
+  if(!Symbol.observable) {
+    (Symbol as any).observable = Symbol.for('observable'); // I'm not sure why this isn't being created right but it's not and it's causing issues
+  } else {
+    console.log('Symbol.observable exists, you can remove this');
+  }
 }
 
 /**
