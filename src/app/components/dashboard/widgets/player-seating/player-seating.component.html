@@ -20,7 +20,17 @@
       </div>
     </div>
     <div class="draft-info" *ngIf="showDraftInfo()">
-
+      Draft table info is not currently supported.
+    </div>
+    <div class="round-info" *ngIf="showRoundInfo()">
+      <ul>
+        <li *ngFor="let pairing of getPairingsByPlayer()">
+          {{pairing.table}} | {{pairing.name}} - {{pairing.result}} - {{pairing.opponent}}
+        </li>
+      </ul>
+    </div>
+    <div class="standings" *ngIf="showStandings()">
+      Player standings are not currently supported.
     </div>
   </mat-card-content>
 </mat-card>

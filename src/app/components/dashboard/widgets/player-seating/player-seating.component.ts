@@ -94,7 +94,11 @@ export class PlayerSeatingComponent implements OnInit, OnDestroy {
         // Listen for new registrations
         this.subs.push(this.eventlink.subscribeToPlayerRegistered(this.event.id).subscribe((reg) => {
           this.players.unshift(reg);
-          // TODO IF THE PLAYER WAS INTERESTED AND IS NOW REGISTERED THEY ARE NOT REMOVED FROM THE INTERESTED PLAYER LIST
+          // IF THE PLAYER WAS INTERESTED AND IS NOW REGISTERED THEY ARE NOT REMOVED FROM THE INTERESTED PLAYER LIST
+          const resIndex = this.reservations.findIndex((res) => res.personaId === reg.personaId)
+          if(resIndex !== -1) {
+            this.reservations.splice(resIndex, 1);
+          }
         }));
         // Listen for registration changes, and update the relevant player
         this.subs.push(this.eventlink.subscribeToRegistrationUpdated(this.event.id).subscribe((reg) => {
@@ -154,5 +158,34 @@ export class PlayerSeatingComponent implements OnInit, OnDestroy {
 
   public showStandings() {
     return this.eventInfo?.status && [EventStatus.Roundcertified, EventStatus.Ended].includes(this.eventInfo?.status);
+  }
+
+  public getPairingsByPlayer() {
+    type MatchByName = {
+      table: number,
+      name: string,
+      result: string,
+      opponent: string,
+    };
+
+    const matches = this.eventInfo?.gameState?.currentRound?.matches || [];
+    const pairings: MatchByName[] = [];
+    for(const match of matches) {
+      pairings.push({
+        table: match.tableNumber || -1,
+        name: match.teams[0].name || 'unknown',
+        result: `${match.leftTeamWins}-${match.rightTeamWins}`,
+        opponent: match.teams[1].name || 'unknown',
+      });
+    }
+    return pairings.sort((a, b) => {
+      if(a.name.toLowerCase() < b.name.toLowerCase()) {
+        return -1;
+      } else if(a.name.toLowerCase() > b.name.toLowerCase()) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
   }
 }
