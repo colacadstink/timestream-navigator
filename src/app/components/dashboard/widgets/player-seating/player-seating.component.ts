@@ -6,7 +6,7 @@ import {
   Match,
   Registration,
   ReservationNotificationPayload,
-  Team
+  Team, TeamStanding
 } from 'spirit-link';
 import {Subscription} from 'rxjs';
 
@@ -152,6 +152,7 @@ export class PlayerSeatingComponent implements OnInit, OnDestroy {
     });
   }
 
+  // region Event state checking
   public showRegistrationInfo() {
     return this.eventInfo?.status && [EventStatus.Scheduled, EventStatus.Playerregistration].includes(this.eventInfo?.status);
   }
@@ -161,14 +162,15 @@ export class PlayerSeatingComponent implements OnInit, OnDestroy {
   }
 
   public showRoundInfo() {
-    return this.eventInfo?.status && [EventStatus.Roundready, EventStatus.Roundactive, EventStatus.Running, EventStatus.Ended].includes(this.eventInfo?.status);
+    return this.eventInfo?.status && [EventStatus.Roundready, EventStatus.Roundactive, EventStatus.Running].includes(this.eventInfo?.status);
   }
 
   public showStandings() {
     return this.eventInfo?.status && [EventStatus.Roundcertified, EventStatus.Ended].includes(this.eventInfo?.status);
   }
+  //endregion
 
-  public static getTeamName(team: Team) {
+  public getTeamName(team: Team) {
     if(!team) {
       return 'n/a';
     }
@@ -192,18 +194,19 @@ export class PlayerSeatingComponent implements OnInit, OnDestroy {
     const matches: Match[] = this.eventInfo?.gameState?.currentRound?.matches || [];
     const pairings: MatchByName[] = [];
     for(const match of matches) {
+      console.log(match.teams);
       pairings.push({
         table: match.tableNumber || -1,
-        name: PlayerSeatingComponent.getTeamName(match.teams[0]),
+        name: this.getTeamName(match.teams[0]),
         result: `${match.leftTeamWins || 0}-${match.rightTeamWins || 0}`,
-        opponent: PlayerSeatingComponent.getTeamName(match.teams[1]),
+        opponent: this.getTeamName(match.teams[1]),
       });
       if(match.teams[1]) {
         pairings.push({
           table: match.tableNumber || -1,
-          name: PlayerSeatingComponent.getTeamName(match.teams[1]),
+          name: this.getTeamName(match.teams[1]),
           result: `${match.rightTeamWins || 0}-${match.leftTeamWins || 0}`,
-          opponent: PlayerSeatingComponent.getTeamName(match.teams[0]),
+          opponent: this.getTeamName(match.teams[0]),
         });
       }
     }
@@ -216,5 +219,10 @@ export class PlayerSeatingComponent implements OnInit, OnDestroy {
         return 0;
       }
     });
+  }
+
+  public getStandingsByRank() {
+    const standings: TeamStanding[] = this.eventInfo?.gameState?.standings || [];
+    return standings;
   }
 }

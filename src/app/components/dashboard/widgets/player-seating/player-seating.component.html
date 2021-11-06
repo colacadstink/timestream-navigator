@@ -30,7 +30,11 @@
       </ul>
     </div>
     <div class="standings" *ngIf="showStandings()">
-      Player standings are not currently supported.
+      <ol>
+        <li *ngFor="let standing of getStandingsByRank(); let i = index">
+          {{getTeamName(standing.team)}} - {{standing.matchPoints}} ({{standing.wins}}-{{standing.losses}}-{{standing.draws}})
+        </li>
+      </ol>
     </div>
   </mat-card-content>
 </mat-card>
