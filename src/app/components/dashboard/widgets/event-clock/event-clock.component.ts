@@ -127,7 +127,7 @@ export class EventClockComponent implements OnInit {
   }
 
   private getMinSecString() {
-    if(this.eventInfo?.status === 'SCHEDULED') {
+    if(this.eventInfo?.status === 'SCHEDULED' || this.eventInfo?.status === 'ROUNDCERTIFIED') {
       return '__:__';
     }
     if(this.eventInfo?.status === 'ENDED' || this.eventInfo?.status === 'CANCELLED') {
