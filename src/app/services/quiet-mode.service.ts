@@ -5,6 +5,8 @@ import {BehaviorSubject} from 'rxjs';
   providedIn: 'root'
 })
 export class QuietModeService {
+  private static LOCAL_STORAGE_KEY = 'TimestreamNavigator_QuietMode';
+
   // region public observable: Observable<boolean>;
   private subject = new BehaviorSubject(false);
   public get observable() {
@@ -18,7 +20,12 @@ export class QuietModeService {
   }
   public set value(v) {
     this._value = v;
+    localStorage.setItem(QuietModeService.LOCAL_STORAGE_KEY, v ? 'true' : '');
     this.subject.next(v);
   }
   //endregion
+
+  constructor() {
+    this._value = !!localStorage.getItem(QuietModeService.LOCAL_STORAGE_KEY);
+  }
 }
