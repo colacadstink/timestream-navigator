@@ -9,6 +9,7 @@ import {
   Team, TeamStanding
 } from 'spirit-link';
 import {Subscription} from 'rxjs';
+import {QuietModeService} from '../../../../services/quiet-mode.service';
 
 /*
 
@@ -56,7 +57,8 @@ export class PlayerSeatingComponent implements OnInit, OnDestroy {
   // endregion
 
   constructor(
-    private eventlink: EventlinkClient
+    private eventlink: EventlinkClient,
+    public quietMode: QuietModeService,
   ) { }
 
   public ngOnInit() {

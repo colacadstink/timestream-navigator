@@ -23,18 +23,24 @@
       Draft table info is not currently supported.
     </div>
     <div class="round-info" *ngIf="showRoundInfo()">
-      <ul>
-        <li *ngFor="let pairing of getPairingsByPlayer()">
-          {{pairing.table === -1 ? 'Bye' : pairing.table}} | {{pairing.name}} - {{pairing.result}} - {{pairing.opponent}}
-        </li>
-      </ul>
+      <ng-template #pairingsTemplate>
+        <ul>
+          <li *ngFor="let pairing of getPairingsByPlayer()">
+            {{pairing.table === -1 ? 'Bye' : pairing.table}} | {{pairing.name}} - {{pairing.result}} - {{pairing.opponent}}
+          </li>
+        </ul>
+      </ng-template>
+      <app-looping-auto-scroll [template]="pairingsTemplate"></app-looping-auto-scroll>
     </div>
     <div class="standings" *ngIf="showStandings()">
-      <ol>
-        <li *ngFor="let standing of getStandingsByRank(); let i = index">
-          {{getTeamName(standing.team)}} - {{standing.matchPoints}} ({{standing.wins}}-{{standing.losses}}-{{standing.draws}})
-        </li>
-      </ol>
+      <ng-template #standingsTemplate>
+        <ol>
+          <li *ngFor="let standing of getStandingsByRank(); let i = index">
+            {{getTeamName(standing.team)}} - {{standing.matchPoints}} ({{standing.wins}}-{{standing.losses}}-{{standing.draws}})
+          </li>
+        </ol>
+      </ng-template>
+      <app-looping-auto-scroll [template]="standingsTemplate"></app-looping-auto-scroll>
     </div>
   </mat-card-content>
 </mat-card>

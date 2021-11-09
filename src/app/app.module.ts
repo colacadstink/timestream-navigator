@@ -21,6 +21,7 @@ import {JoinCodeComponent} from './components/dashboard/widgets/join-code/join-c
 import {PlayerSeatingComponent} from './components/dashboard/widgets/player-seating/player-seating.component';
 import {EventClockComponent} from './components/dashboard/widgets/event-clock/event-clock.component';
 import {MatToolbarModule} from '@angular/material/toolbar';
+import { LoopingAutoScrollComponent } from './components/looping-auto-scroll/looping-auto-scroll.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import {MatToolbarModule} from '@angular/material/toolbar';
     JoinCodeComponent,
     PlayerSeatingComponent,
     HumanPrintPipe,
-    DashboardComponent
+    DashboardComponent,
+    LoopingAutoScrollComponent
   ],
   imports: [
     AppRoutingModule,
