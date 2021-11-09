@@ -50,6 +50,7 @@ export class PlayerSeatingComponent implements OnInit, OnDestroy {
   private subs: Subscription[] = [];
 
   public eventInfo?: Event;
+  public fontSize = 18;
 
   // region Registration-specific variables
   public players: Registration[] = [];

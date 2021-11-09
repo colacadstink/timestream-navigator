@@ -41,3 +41,7 @@ button.spinner:before {
 .mat-form-field.mat-focused .mat-form-field-label {
   color: #da83ff;
 }
+
+.clickable {
+  cursor: pointer;
+}

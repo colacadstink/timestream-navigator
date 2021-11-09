@@ -5,6 +5,15 @@ mat-card-title {
   justify-content: space-between;
 }
 
+mat-card-content {
+  font-size: calc(var(--font-size) * 1pt);
+  line-height: calc(var(--font-size) * 1pt);
+
+  ul, ol {
+    padding-left: calc((var(--font-size) * 2px) + 6px);
+  }
+}
+
 .registration-info {
   display: flex;
 
@@ -15,4 +24,15 @@ mat-card-title {
 
 mat-card-content div {
   height: 100%;
+}
+
+button.mat-small {
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  min-height: 20px;
+  vertical-align: top;
+  font-size: 10px;
+  padding: 0 0;
+  margin: 0;
 }

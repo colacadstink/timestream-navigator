@@ -1,10 +1,16 @@
 <mat-card>
   <mat-card-header class="full-width-header">
     <mat-card-title>
-      {{eventInfo?.title}}
+      <div>
+        {{eventInfo?.title}}
+      </div>
+      <div *ngIf="!quietMode.value">
+        <div class="material-icons clickable" (click)="fontSize = fontSize + 2">add</div>
+        <div class="material-icons clickable" (click)="fontSize = fontSize - 2">remove</div>
+      </div>
     </mat-card-title>
   </mat-card-header>
-  <mat-card-content>
+  <mat-card-content [style]="'--font-size: ' + fontSize">
     <div class="registration-info" *ngIf="showRegistrationInfo()">
       <div class="registered-players">
         Registered players: {{players.length}}
