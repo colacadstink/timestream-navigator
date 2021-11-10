@@ -197,7 +197,6 @@ export class PlayerSeatingComponent implements OnInit, OnDestroy {
     const matches: Match[] = this.eventInfo?.gameState?.currentRound?.matches || [];
     const pairings: MatchByName[] = [];
     for(const match of matches) {
-      console.log(match.teams);
       pairings.push({
         table: match.tableNumber || -1,
         name: this.getTeamName(match.teams[0]),
