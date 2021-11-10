@@ -26,7 +26,18 @@
       </div>
     </div>
     <div class="draft-info" *ngIf="showDraftInfo()">
-      Draft table info is not currently supported.
+      <ng-template #draftTemplate>
+        <div *ngFor="let pod of eventInfo?.gameState?.pods" class="pod-container">
+          <div class="pod-header">Pod {{pod.number}}</div>
+          <hr>
+          <ol>
+            <li *ngFor="let seat of pod.seats">
+              {{seat.firstName}} {{seat.lastName}}
+            </li>
+          </ol>
+        </div>
+      </ng-template>
+      <app-looping-auto-scroll [template]="draftTemplate"></app-looping-auto-scroll>
     </div>
     <div class="round-info" *ngIf="showRoundInfo()">
       <ng-template #pairingsTemplate>
