@@ -9,7 +9,7 @@ import {
   Team, TeamStanding
 } from 'spirit-link';
 import {Subscription} from 'rxjs';
-import {QuietModeService} from '../../../../services/quiet-mode.service';
+import {QuietModeService} from '../../../services/quiet-mode.service';
 
 /*
 

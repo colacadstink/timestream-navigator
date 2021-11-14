@@ -17,9 +17,9 @@ import {LogInDialogComponent} from './dialogs/log-in-dialog/log-in-dialog.compon
 import {AddNewWidgetDialogComponent} from './dialogs/add-new-widget-dialog/add-new-widget-dialog.component';
 import {HumanPrintPipe} from './pipes/human-print.pipe';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import {JoinCodeComponent} from './components/dashboard/widgets/join-code/join-code.component';
-import {PlayerSeatingComponent} from './components/dashboard/widgets/player-seating/player-seating.component';
-import {EventClockComponent} from './components/dashboard/widgets/event-clock/event-clock.component';
+import {JoinCodeComponent} from './components/widgets/join-code/join-code.component';
+import {PlayerSeatingComponent} from './components/widgets/player-seating/player-seating.component';
+import {EventClockComponent} from './components/widgets/event-clock/event-clock.component';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import { LoopingAutoScrollComponent } from './components/looping-auto-scroll/looping-auto-scroll.component';
 
