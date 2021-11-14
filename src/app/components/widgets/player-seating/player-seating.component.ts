@@ -136,7 +136,7 @@ export class PlayerSeatingComponent implements OnInit, OnDestroy {
           this.refreshEventInfo();
         }));
         // endregion
-      } else if(this.showDraftInfo()) {
+      } else if(this.showDraftInfo() || this.showDeckConstructionInfo()) {
         // There's nothing to do for draft, it just works
       } else if(this.showRoundInfo()) {
         // region Round info setup
