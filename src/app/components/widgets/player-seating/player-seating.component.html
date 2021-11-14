@@ -43,7 +43,7 @@
       <ng-template #deckConstructionTemplate>
         <div class="seating-header">Player Seating</div>
         <div *ngFor="let seat of getSeatingsByPlayer()" class="constructed-seats-container">
-          {{seat.lastName}}, {{seat.lastName}} - {{seat.number}}
+          {{seat.lastName}}, {{seat.firstName}} - {{seat.number}}
         </div>
       </ng-template>
       <app-looping-auto-scroll [template]="deckConstructionTemplate"></app-looping-auto-scroll>
