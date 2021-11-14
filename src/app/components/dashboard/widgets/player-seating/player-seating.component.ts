@@ -5,7 +5,7 @@ import {
   EventStatus,
   Match,
   Registration,
-  ReservationNotificationPayload,
+  ReservationNotificationPayload, Seat,
   Team, TeamStanding
 } from 'spirit-link';
 import {Subscription} from 'rxjs';
@@ -161,7 +161,11 @@ export class PlayerSeatingComponent implements OnInit, OnDestroy {
   }
 
   public showDraftInfo() {
-    return this.eventInfo?.status && [EventStatus.Drafting, EventStatus.Deckconstruction].includes(this.eventInfo?.status);
+    return this.eventInfo?.status === EventStatus.Drafting;
+  }
+
+  public showDeckConstructionInfo() {
+    return this.eventInfo?.status === EventStatus.Deckconstruction;
   }
 
   public showRoundInfo() {
@@ -219,6 +223,26 @@ export class PlayerSeatingComponent implements OnInit, OnDestroy {
         return 1;
       } else {
         return 0;
+      }
+    });
+  }
+
+  public getSeatingsByPlayer() {
+    const seats: Seat[] = this.eventInfo?.gameState?.constructedSeats || [];
+
+    return seats.sort((a, b) => {
+      if((a.lastName ?? '').toLowerCase() < (b.lastName ?? '').toLowerCase()) {
+        return -1;
+      } else if((a.lastName ?? '').toLowerCase() > (b.lastName ?? '').toLowerCase()) {
+        return 1;
+      } else {
+        if((a.firstName ?? '').toLowerCase() < (b.firstName ?? '').toLowerCase()) {
+          return -1;
+        } else if((a.firstName ?? '').toLowerCase() > (b.firstName ?? '').toLowerCase()) {
+          return 1;
+        } else {
+          return 0;
+        }
       }
     });
   }

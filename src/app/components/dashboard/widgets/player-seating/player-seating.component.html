@@ -39,6 +39,15 @@
       </ng-template>
       <app-looping-auto-scroll [template]="draftTemplate"></app-looping-auto-scroll>
     </div>
+    <div class="draft-info" *ngIf="showDeckConstructionInfo()">
+      <ng-template #deckConstructionTemplate>
+        <div class="seating-header">Player Seating</div>
+        <div *ngFor="let seat of getSeatingsByPlayer()" class="constructed-seats-container">
+          {{seat.lastName}}, {{seat.lastName}} - {{seat.number}}
+        </div>
+      </ng-template>
+      <app-looping-auto-scroll [template]="deckConstructionTemplate"></app-looping-auto-scroll>
+    </div>
     <div class="round-info" *ngIf="showRoundInfo()">
       <ng-template #pairingsTemplate>
         <ul>
