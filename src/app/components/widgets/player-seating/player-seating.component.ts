@@ -26,6 +26,14 @@ During a "round confirmed" period, show standings by rank. Player name, points, 
 
  */
 
+type DisplayState = 'registration' | 'draft' | 'deckConstruction' | 'round' | 'standings' | null;
+type MatchByName = {
+  table: number,
+  name: string,
+  result: string,
+  opponent: string,
+};
+
 @Component({
   selector: 'app-player-seating',
   templateUrl: './player-seating.component.html',
@@ -50,11 +58,24 @@ export class PlayerSeatingComponent implements OnInit, OnDestroy {
   private subs: Subscription[] = [];
 
   public eventInfo?: Event;
+  public currentDisplayState: DisplayState = null;
   public fontSize = 18;
 
   // region Registration-specific variables
   public players: Registration[] = [];
   public reservations: ReservationNotificationPayload[] = [];
+  // endregion
+
+  // region Deck construction specific variables
+  public seatingsByPlayer: Seat[] = [];
+  // endregion
+
+  // region Round-specific variables
+  public pairingsByPlayer: MatchByName[] = [];
+  // endregion
+
+  // region Standings-specific variables
+  public standingsByRank: TeamStanding[] = [];
   // endregion
 
   constructor(
@@ -88,6 +109,7 @@ export class PlayerSeatingComponent implements OnInit, OnDestroy {
       this.unsubscribeFromSubs();
 
       if(this.showRegistrationInfo()) {
+        this.currentDisplayState = 'registration';
         // region Registration setup
         this.players = [...(this.eventInfo.registeredPlayers || [])];
         this.reservations = [...(this.eventInfo.interestedPlayers?.map((player) => {
@@ -136,19 +158,29 @@ export class PlayerSeatingComponent implements OnInit, OnDestroy {
           this.refreshEventInfo();
         }));
         // endregion
-      } else if(this.showDraftInfo() || this.showDeckConstructionInfo()) {
-        // There's nothing to do for draft, it just works
+      } else if(this.showDraftInfo()) {
+        this.currentDisplayState = 'draft';
+      } else if(this.showDeckConstructionInfo()) {
+        this.currentDisplayState = 'deckConstruction';
+        this.seatingsByPlayer =  this.getSeatingsByPlayer();
       } else if(this.showRoundInfo()) {
+        this.currentDisplayState = 'round';
         // region Round info setup
         // Listen for results to get reported, and RELOAD THE ENTIRE EVENT AGAIN BECAUSE I DON'T KNOW WHICH MATCH CHANGED
         // TODO Complain to WotC about this
         this.subs.push(this.eventlink.subscribeToGameResultReported(this.event.id).subscribe(() => {
           this.refreshEventInfo();
         }));
+
+        // Cache the pairings by player
+        this.pairingsByPlayer = this.getPairingsByPlayer();
+
         // endregion
       } else if(this.showStandings()) {
-        // There's nothing to do for standings, it just works
+        this.currentDisplayState = 'standings';
+        this.standingsByRank = this.getStandingsByRank();
       } else {
+        this.currentDisplayState = null;
         console.log("I don't know what to do! Was it cancelled? ", this.eventInfo?.status);
         console.log(this.eventInfo);
       }
@@ -156,23 +188,23 @@ export class PlayerSeatingComponent implements OnInit, OnDestroy {
   }
 
   // region Event state checking
-  public showRegistrationInfo() {
+  private showRegistrationInfo() {
     return this.eventInfo?.status && [EventStatus.Scheduled, EventStatus.Playerregistration].includes(this.eventInfo?.status);
   }
 
-  public showDraftInfo() {
+  private showDraftInfo() {
     return this.eventInfo?.status === EventStatus.Drafting;
   }
 
-  public showDeckConstructionInfo() {
+  private showDeckConstructionInfo() {
     return this.eventInfo?.status === EventStatus.Deckconstruction;
   }
 
-  public showRoundInfo() {
+  private showRoundInfo() {
     return this.eventInfo?.status && [EventStatus.Roundready, EventStatus.Roundactive, EventStatus.Running].includes(this.eventInfo?.status);
   }
 
-  public showStandings() {
+  private showStandings() {
     return this.eventInfo?.status && [EventStatus.Roundcertified, EventStatus.Ended].includes(this.eventInfo?.status);
   }
   //endregion
@@ -190,14 +222,7 @@ export class PlayerSeatingComponent implements OnInit, OnDestroy {
     return 'unknown';
   }
 
-  public getPairingsByPlayer() {
-    type MatchByName = {
-      table: number,
-      name: string,
-      result: string,
-      opponent: string,
-    };
-
+  private getPairingsByPlayer() {
     const matches: Match[] = this.eventInfo?.gameState?.currentRound?.matches || [];
     const pairings: MatchByName[] = [];
     for(const match of matches) {
@@ -227,7 +252,7 @@ export class PlayerSeatingComponent implements OnInit, OnDestroy {
     });
   }
 
-  public getSeatingsByPlayer() {
+  private getSeatingsByPlayer() {
     const seats: Seat[] = this.eventInfo?.gameState?.constructedSeats || [];
 
     return seats.sort((a, b) => {
@@ -247,7 +272,7 @@ export class PlayerSeatingComponent implements OnInit, OnDestroy {
     });
   }
 
-  public getStandingsByRank() {
+  private getStandingsByRank() {
     const standings: TeamStanding[] = this.eventInfo?.gameState?.standings || [];
     return standings;
   }

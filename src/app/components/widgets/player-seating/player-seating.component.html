@@ -11,7 +11,7 @@
     </mat-card-title>
   </mat-card-header>
   <mat-card-content [style]="'--font-size: ' + fontSize">
-    <div class="registration-info" *ngIf="showRegistrationInfo()">
+    <div class="registration-info" *ngIf="currentDisplayState === 'registration'">
       <div class="registered-players">
         Registered players: {{players.length}}
         <ul>
@@ -25,7 +25,7 @@
         </ul>
       </div>
     </div>
-    <div class="draft-info" *ngIf="showDraftInfo()">
+    <div class="draft-info" *ngIf="currentDisplayState === 'draft'">
       <ng-template #draftTemplate>
         <div *ngFor="let pod of eventInfo?.gameState?.pods" class="pod-container">
           <div class="pod-header">Pod {{pod.number}}</div>
@@ -39,29 +39,29 @@
       </ng-template>
       <app-looping-auto-scroll [template]="draftTemplate"></app-looping-auto-scroll>
     </div>
-    <div class="draft-info" *ngIf="showDeckConstructionInfo()">
+    <div class="deck-construction-info" *ngIf="currentDisplayState === 'deckConstruction'">
       <ng-template #deckConstructionTemplate>
         <div class="seating-header">Player Seating</div>
-        <div *ngFor="let seat of getSeatingsByPlayer()" class="constructed-seats-container">
+        <div *ngFor="let seat of seatingsByPlayer" class="constructed-seats-container">
           {{seat.lastName}}, {{seat.firstName}} - {{seat.number}}
         </div>
       </ng-template>
       <app-looping-auto-scroll [template]="deckConstructionTemplate"></app-looping-auto-scroll>
     </div>
-    <div class="round-info" *ngIf="showRoundInfo()">
+    <div class="round-info" *ngIf="currentDisplayState === 'round'">
       <ng-template #pairingsTemplate>
         <ul>
-          <li *ngFor="let pairing of getPairingsByPlayer()">
+          <li *ngFor="let pairing of pairingsByPlayer">
             {{pairing.table === -1 ? 'Bye' : pairing.table}} | {{pairing.name}} - {{pairing.result}} - {{pairing.opponent}}
           </li>
         </ul>
       </ng-template>
       <app-looping-auto-scroll [template]="pairingsTemplate"></app-looping-auto-scroll>
     </div>
-    <div class="standings" *ngIf="showStandings()">
+    <div class="standings" *ngIf="currentDisplayState === 'standings'">
       <ng-template #standingsTemplate>
         <ol>
-          <li *ngFor="let standing of getStandingsByRank(); let i = index">
+          <li *ngFor="let standing of standingsByRank; let i = index">
             {{getTeamName(standing.team)}} - {{standing.matchPoints}} ({{standing.wins}}-{{standing.losses}}-{{standing.draws}})
           </li>
         </ol>
